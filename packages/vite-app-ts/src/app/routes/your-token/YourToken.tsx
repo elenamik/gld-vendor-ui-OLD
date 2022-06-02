@@ -33,6 +33,7 @@ export const YourToken: FC<IYourTokenProps> = (props) => {
   const address = ethersContext.account ?? '';
 
   const vendorContract = readContracts['Vendor'] as Vendor;
+  console.log('VENDOR', vendorContract)
   const yourTokenContract = readContracts['YourToken'] as YourTokenContract;
 
   const vendorContractWrite = writeContracts['Vendor'] as Vendor;
@@ -176,6 +177,9 @@ export const YourToken: FC<IYourTokenProps> = (props) => {
   }
 
   const buyTokensEvents = useEventListener(vendorContract, 'BuyTokens', 1);
+  const sellTokensEvents = useEventListener(vendorContract, 'SellTokens', 1);
+  console.log('EVENTS', buyTokensEvents, sellTokensEvents)
+
 
   return (
     <>
@@ -295,6 +299,23 @@ export const YourToken: FC<IYourTokenProps> = (props) => {
         <div>Buy Token Events:</div>
         <List
           dataSource={buyTokensEvents}
+          renderItem={(item) => {
+            return (
+              <List.Item key={item.blockNumber + item.blockHash}>
+                <Address address={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> paid
+                <Balance balance={item.args[1]} address={undefined} />
+                ETH to get
+                <Balance balance={item.args[2]} address={undefined} />
+                Tokens
+              </List.Item>
+            );
+          }}
+        />
+      </div>
+      <div style={{ width: 500, margin: 'auto', marginTop: 64 }}>
+        <div>Sell Token Events:</div>
+        <List
+          dataSource={sellTokensEvents}
           renderItem={(item) => {
             return (
               <List.Item key={item.blockNumber + item.blockHash}>
