@@ -9,13 +9,18 @@ contract Vendor is Ownable {
   YourToken public yourToken;
   uint256 public constant tokensPerEth = 100;
   event BuyTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
+  event SellTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
 
   constructor(address tokenAddress) {
     yourToken = YourToken(tokenAddress);
   }
 
   function buyTokens() external payable {
+    require(msg.value > 0, 'Buy amount must be greater than 0');
     uint256 amountToBuy = msg.value * tokensPerEth;
+
+    require(yourToken.balanceOf(address(this)) >= amountToBuy, 'Vendor does not have enough tokens');
+
     yourToken.transfer(msg.sender, amountToBuy);
     emit BuyTokens(msg.sender, msg.value, amountToBuy);
   }
@@ -23,8 +28,6 @@ contract Vendor is Ownable {
   function sellTokens(uint256 _tokens) public {
     require(_tokens > 0, 'Need to sell a nonzero amount');
     uint256 ethToTransferToSeller = _tokens / tokensPerEth;
-
-    console.log('TRANSFERRING', _tokens, tokensPerEth);
 
     require(address(this).balance >= ethToTransferToSeller, 'contract does not hold enough eth to buy back tokens');
 
@@ -35,7 +38,8 @@ contract Vendor is Ownable {
     bool ethTransferSuccess;
     (ethTransferSuccess, ) = msg.sender.call{value: ethToTransferToSeller}('');
     require(ethTransferSuccess, 'Failed to send ether');
-    console.log('COMPLETED');
+
+    emit SellTokens(msg.sender, ethToTransferToSeller, _tokens);
   }
 
   // withdraw() function that lets the owner withdraw ETH

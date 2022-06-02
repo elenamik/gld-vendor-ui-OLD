@@ -251,7 +251,7 @@ export const YourToken: FC<IYourTokenProps> = (props) => {
                   }
 
                   setBuying(true);
-                  await tx(vendorContractWrite.sellTokens(tokenSellAmount.toString()));
+                  await tx(vendorContractWrite.sellTokens(ethers.utils.parseEther(tokenSellAmount.toString())));
                   setBuying(false);
                 }}>
                 Sell Tokens
@@ -271,7 +271,7 @@ export const YourToken: FC<IYourTokenProps> = (props) => {
                   await tx(
                     yourTokenContractWrite.approve(
                       readContracts.Vendor.address,
-                      tokenSellAmount.toString()
+                      ethers.utils.parseEther(tokenSellAmount.toString())
                     )
                   );
                   setBuying(false);
