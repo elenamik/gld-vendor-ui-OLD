@@ -1,5 +1,4 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
-import input from 'antd/lib/input';
 import { TEthersProvider, TNetworkInfo } from 'eth-hooks/models';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ICoreOptions } from 'web3modal';
@@ -22,7 +21,6 @@ export const useScaffoldProviders = (): IScaffoldAppProviders => {
   useEffect(() => {
     // import async to split bundles
     const importedConfig = import('../../../../config/web3ModalConfig');
-
     importedConfig.then((getter) => {
       getter.getWeb3ModalConfig().then((config) => {
         setWeb3Config(config);
