@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import macrosPlugin from 'vite-plugin-babel-macros';
 import reactPlugin from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import path, { resolve } from 'path';
+import { resolve } from 'path';
 
 const isDev = process.env.ENVIRONMENT == 'DEVELOPMENT';
 console.log('env.dev:', process.env.ENVIRONMENT, ' isDev:', isDev);
