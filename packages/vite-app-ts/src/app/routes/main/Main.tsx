@@ -5,14 +5,17 @@ import '~~/styles/main-page.css';
 import { useAppContracts } from './hooks/useAppContracts';
 import {BigNumber, ethers} from "ethers";
 import {useBalance, useContractLoader } from 'eth-hooks';
-import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
+import {IScaffoldAppProviders, useScaffoldProviders} from './hooks/useScaffoldAppProviders';
 import { formatEther } from '@ethersproject/units';
+import {IEthersContext} from "eth-hooks/context/EthersAppContext";
 
 
 export const Main: FC = () => {
     const scaffoldAppProviders = useScaffoldProviders();
     const ethersContext = useEthersContext();
     const appContractConfig = useAppContracts();
+
+    console.log(ethersContext)
 
 
     const readContracts = useContractLoader(appContractConfig)
@@ -38,7 +41,11 @@ export const Main: FC = () => {
 
     return (
     <div className="App">
+        <WalletHeader context={ethersContext} providers={scaffoldAppProviders}/>
       hi, world
+        <div>
+            Account connected is
+        </div>
     <div>
         balance of ETH in Vendor is {vendorEthBal} ETH
     </div>
@@ -53,4 +60,24 @@ export default Main;
 
 export const parseEther= (balance: BigNumber)=> {
     return formatEther(BigNumber.from(balance));
+}
+
+export const WalletHeader: FC<{context: IEthersContext, providers: IScaffoldAppProviders}> = ({context, providers})=> {
+    if (context.account){
+        return <div>
+            Connected account is {context.account}
+            <br/>
+            <button onClick={context.disconnectModal}>
+                Disconnect Wallet
+            </button>
+        </div>
+    } else {
+        return <div>
+            <button onClick={()=> {
+                console.log('opening?') // TODO: gotta do this with web3 modal?
+                providers.createLoginConnector()}}>
+                Connect Wallet
+            </button>
+        </div>
+    }
 }
