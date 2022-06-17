@@ -1,9 +1,10 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
-import { TEthersProvider, TNetworkInfo } from 'eth-hooks/models';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ICoreOptions } from 'web3modal';
 import { EthersModalConnector, useEthersContext, CreateEthersModalConnector } from 'eth-hooks/context';
+import { TEthersProvider, TNetworkInfo } from 'eth-hooks/models';
+import { useCallback, useEffect, useState } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { ICoreOptions } from 'web3modal';
+
 import { mainnetProvider, localProvider, targetNetworkInfo } from '~~/config/providersConfig';
 
 export interface IScaffoldAppProviders {
@@ -17,7 +18,6 @@ export interface IScaffoldAppProviders {
 export const useScaffoldProviders = (): IScaffoldAppProviders => {
   const [web3Config, setWeb3Config] = useState<Partial<ICoreOptions>>();
   const ethersContext = useEthersContext();
-
   useEffect(() => {
     // import async to split bundles
     const importedConfig = import('../../../../config/web3ModalConfig');
