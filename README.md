@@ -1,9 +1,12 @@
 
 ## 🏵 GLD Vendor
 This is a fork of [scaffold-eth challenge 2](https://speedrunethereum.com/challenge/token-vendor) that aims to build a brand new UI from scratch.
+
 I am leveraging eth-hooks, and using a [design](https://www.figma.com/file/KXrIvKLSGnH3AfIzFIJvu6/GLD-Token-Vendor?node-id=0%3A1) I drafted up in Figma to create a more enticing UX.
 
 I am tracking progress [here](https://github.com/elenamik/gld-vendor-ui/projects/1).
+
+The contract and out-of-the-box UI can be found on my [buidlguidl profile](https://buidlguidl.com/builders/0x74503D89E994e5e6FE44Ba3BBD09e048F0185403).
 
 ### 📦 install 
 
