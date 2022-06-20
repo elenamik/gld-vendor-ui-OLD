@@ -1,56 +1,57 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useEthersContext } from 'eth-hooks/context';
 
 import '~~/styles/main-page.css';
 import { useAppContracts } from './hooks/useAppContracts';
-import {BigNumber, ethers} from "ethers";
-import {useBalance, useContractLoader } from 'eth-hooks';
-import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
-import { formatEther } from '@ethersproject/units';
 
+import { BigNumber, ethers } from 'ethers';
+import { useContractLoader } from 'eth-hooks';
+
+import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
+
+import { Account } from '~~/app/common/Account';
+import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
+
+import { useEthersAppContext } from 'eth-hooks/context';
+import { Balance } from 'eth-components/ant';
+import { TEthersProviderOrSigner } from 'eth-hooks/models';
 
 export const Main: FC = () => {
-    const scaffoldAppProviders = useScaffoldProviders();
-    const ethersContext = useEthersContext();
-    const appContractConfig = useAppContracts();
+  const scaffoldAppProviders = useScaffoldProviders();
+  const appContractConfig = useAppContracts();
+  const ethersContext = useEthersAppContext();
 
+  const readContracts = useContractLoader(appContractConfig, ethersContext.provider as TEthersProviderOrSigner);
+  const vendorContract = readContracts['Vendor'] as unknown as Vendor;
+  const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
 
-    const readContracts = useContractLoader(appContractConfig)
-    const vendorContract = readContracts['Vendor'] as any;
-    const tokenContract = readContracts['YourToken'] as any;
+  console.log('contracts', vendorContract, tokenContract);
+  const [vendorTokenBalance, setVendorTokenBalance] = useState<BigNumber>();
 
+  // @ts-ignore
+  const getVendorTokenBalance = async (): void => {
+    const balance = await tokenContract?.balanceOf(vendorContract?.address);
+    console.log('🏵 vendorTokenBalance:', balance ? ethers.utils.formatEther(balance) : '...');
+    setVendorTokenBalance(balance);
+  };
 
-    const [vendorTokenBal, setVendorTokenBal] = useState<string >('0')
-    const vendorEthBal = parseEther(useBalance(vendorContract?.address))
-
-    const readTokenVendorBal = async ()=> {
-        const getVendorTokenBal = async ()=> {
-            const bal = await tokenContract?.balanceOf(vendorContract?.address)
-            setVendorTokenBal(parseEther(bal))
-        }
-        await getVendorTokenBal()
+  useEffect(() => {
+    if (vendorContract) {
+      getVendorTokenBalance();
     }
-    useEffect(()=> {
-        if (vendorContract){
-            readTokenVendorBal()
-        }
-    }, [vendorContract?.address])
+  }, [vendorContract?.address]);
 
-    return (
+  return (
     <div className="App">
-      hi, world
-    <div>
-        balance of ETH in Vendor is {vendorEthBal} ETH
-    </div>
-        <div>
-            balance of tokens in Vendor is {vendorTokenBal} ETH
-        </div>
+      <Account providers={scaffoldAppProviders} />
+      <div>
+        balance of ETH in Vendor is <Balance address={vendorContract?.address} />
+        ETH
+      </div>
+      <div>
+        balance of tokens in Vendor is <Balance balance={vendorTokenBalance} address={undefined} /> ETH
+      </div>
     </div>
   );
 };
 
 export default Main;
-
-export const parseEther= (balance: BigNumber)=> {
-    return formatEther(BigNumber.from(balance));
-}

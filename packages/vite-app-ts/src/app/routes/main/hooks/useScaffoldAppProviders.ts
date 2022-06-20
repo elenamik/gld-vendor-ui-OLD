@@ -1,22 +1,25 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import { EthersModalConnector, useEthersAppContext } from 'eth-hooks/context';
 import { TEthersProvider, TNetworkInfo } from 'eth-hooks/models';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ICoreOptions } from 'web3modal';
-import { EthersModalConnector, useEthersContext, CreateEthersModalConnector } from 'eth-hooks/context';
+import { useCallback, useEffect, useState } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { ICoreOptions } from 'web3modal';
+
 import { mainnetProvider, localProvider, targetNetworkInfo } from '~~/config/providersConfig';
+
+export type LoginConnector = (id?: string | undefined) => EthersModalConnector | undefined;
 
 export interface IScaffoldAppProviders {
   currentProvider: TEthersProvider | undefined;
   targetNetwork: TNetworkInfo;
   mainnetProvider: StaticJsonRpcProvider;
   localProvider: StaticJsonRpcProvider;
-  createLoginConnector: CreateEthersModalConnector;
+  createLoginConnector: LoginConnector;
 }
 
 export const useScaffoldProviders = (): IScaffoldAppProviders => {
   const [web3Config, setWeb3Config] = useState<Partial<ICoreOptions>>();
-  const ethersContext = useEthersContext();
+  const ethersContext = useEthersAppContext();
 
   useEffect(() => {
     // import async to split bundles
@@ -30,7 +33,7 @@ export const useScaffoldProviders = (): IScaffoldAppProviders => {
 
   const { currentTheme } = useThemeSwitcher();
 
-  const createLoginConnector: CreateEthersModalConnector = useCallback(
+  const createLoginConnector: LoginConnector = useCallback(
     (id?: string) => {
       if (web3Config) {
         const connector = new EthersModalConnector(
@@ -52,7 +55,7 @@ export const useScaffoldProviders = (): IScaffoldAppProviders => {
   }, [web3Config]);
 
   return {
-    currentProvider: ethersContext.ethersProvider ?? localProvider,
+    currentProvider: ethersContext.provider ?? localProvider,
     mainnetProvider: mainnetProvider,
     localProvider: localProvider,
     targetNetwork: targetNetworkInfo,
