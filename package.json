@@ -65,6 +65,9 @@
       "shx": "^0.3.3"
    },
    "dependencies": {
-      "react": "^17.0.2"
+      "react": "^17.0.2",
+      "ts-invariant": "^0.10.3",
+      "use-debounce": "^8.0.1",
+      "usehooks-ts": "^2.5.4"
    }
 }

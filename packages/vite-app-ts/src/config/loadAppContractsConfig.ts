@@ -1,6 +1,5 @@
-import { TContractLoaderConfig, TDeployedContractsJson, TExternalContracts } from 'eth-hooks/models';
-import { ContractFactory, ethers } from 'ethers';
-//import type {YourContract} from "../generated/contract-types";
+import { TContractLoaderConfig } from 'eth-hooks';
+// import type {YourContract} from "../generated/contract-types";
 // this import allows hot module reload to work
 
 const contractListJsonPromise = import('../generated/contracts/hardhat_contracts.json');
@@ -21,7 +20,7 @@ export const loadAppContractsConfig = async (): Promise<TContractLoaderConfig> =
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    config.deployedContractsJson = ((await contractListJsonPromise).default ?? {}) as unknown as TDeployedContractsJson;
+    config.deployedContractsJson = ((await contractListJsonPromise).default ?? {}) as any;
   } catch {
     config.deployedContractsJson = undefined;
     console.error(
@@ -30,10 +29,11 @@ export const loadAppContractsConfig = async (): Promise<TContractLoaderConfig> =
   }
 
   try {
-    config.externalContracts = ((await externalContractsPromise).default ?? {}) as unknown as TExternalContracts;
+    config.externalContracts = ((await externalContractsPromise).default ?? {}) as any;
   } catch {
     config.externalContracts = undefined;
     console.error('😶 No external contracts file found: /generated/contracts/external_contracts');
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return config;
 };
