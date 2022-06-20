@@ -12,7 +12,7 @@ export interface IScaffoldAppProviders {
   targetNetwork: TNetworkInfo;
   mainnetProvider: StaticJsonRpcProvider;
   localProvider: StaticJsonRpcProvider;
-  createLoginConnector: any;
+  createLoginConnector: () => EthersModalConnector;
 }
 
 export const useScaffoldProviders = (): IScaffoldAppProviders => {
