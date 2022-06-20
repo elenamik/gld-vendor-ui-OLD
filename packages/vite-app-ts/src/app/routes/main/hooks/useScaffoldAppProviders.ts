@@ -7,12 +7,14 @@ import { ICoreOptions } from 'web3modal';
 
 import { mainnetProvider, localProvider, targetNetworkInfo } from '~~/config/providersConfig';
 
+export type LoginConnector = (id?: string | undefined) => EthersModalConnector | undefined;
+
 export interface IScaffoldAppProviders {
   currentProvider: TEthersProvider | undefined;
   targetNetwork: TNetworkInfo;
   mainnetProvider: StaticJsonRpcProvider;
   localProvider: StaticJsonRpcProvider;
-  createLoginConnector: () => EthersModalConnector;
+  createLoginConnector: LoginConnector;
 }
 
 export const useScaffoldProviders = (): IScaffoldAppProviders => {
@@ -31,7 +33,7 @@ export const useScaffoldProviders = (): IScaffoldAppProviders => {
 
   const { currentTheme } = useThemeSwitcher();
 
-  const createLoginConnector: any = useCallback(
+  const createLoginConnector: LoginConnector = useCallback(
     (id?: string) => {
       if (web3Config) {
         const connector = new EthersModalConnector(

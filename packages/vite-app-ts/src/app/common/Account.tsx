@@ -12,8 +12,6 @@ export const Account: FC<{
 }> = ({ providers }) => {
   const ethersContext = useEthersAppContext();
   const [connecting, setConnecting] = useState(false);
-
-  console.log('context in acct', ethersContext);
   const isMounted = useIsMounted();
   const [loadingButton, loadingButtonDebounce] = useDebounce(connecting, 1000, {
     maxWait: 1500,
@@ -24,7 +22,7 @@ export const Account: FC<{
   }
   const handleLoginClick = (): void => {
     if (providers.createLoginConnector != null) {
-      const connector = providers.createLoginConnector?.();
+      const connector = providers.createLoginConnector();
       if (connector) ethersContext.activate(connector);
       if (!isMounted()) {
         invariant.log('openModal: no longer mounted');
@@ -67,7 +65,7 @@ export const Account: FC<{
           size="large"
           onClick={handleLoginClick}>
           Connect Wallet
-        </Button>{' '}
+        </Button>
       </div>
     );
   }
