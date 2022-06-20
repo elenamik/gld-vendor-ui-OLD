@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { FC, useEffect, useState } from 'react';
 
 import '~~/styles/main-page.css';
@@ -16,6 +15,7 @@ import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-ty
 
 import { useEthersAppContext } from 'eth-hooks/context';
 import { Balance } from 'eth-components/ant';
+import { TEthersProviderOrSigner } from 'eth-hooks/models';
 
 export const parseEther = (balance: BigNumber): string => {
   return balance ? '0' : formatEther(BigNumber.from(balance));
@@ -26,14 +26,15 @@ export const Main: FC = () => {
   const appContractConfig = useAppContracts();
   const ethersContext = useEthersAppContext();
 
-  const readContracts = useContractLoader(appContractConfig, ethersContext.provider);
+  const readContracts = useContractLoader(appContractConfig, ethersContext.provider as TEthersProviderOrSigner);
   const vendorContract = readContracts['Vendor'] as unknown as Vendor;
   const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
 
   console.log('contracts', vendorContract, tokenContract);
   const [vendorTokenBalance, setVendorTokenBalance] = useState<BigNumber>();
 
-  const getVendorTokenBalance = async () => {
+  // @ts-ignore
+  const getVendorTokenBalance = async (): void => {
     const balance = await tokenContract?.balanceOf(vendorContract?.address);
     console.log('🏵 vendorTokenBalance:', balance ? ethers.utils.formatEther(balance) : '...');
     setVendorTokenBalance(balance);
