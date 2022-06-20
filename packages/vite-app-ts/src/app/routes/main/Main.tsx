@@ -8,18 +8,12 @@ import { useContractLoader } from 'eth-hooks';
 
 import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
 
-import { formatEther } from '@ethersproject/units';
-
 import { Account } from '~~/app/common/Account';
 import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
 import { useEthersAppContext } from 'eth-hooks/context';
 import { Balance } from 'eth-components/ant';
 import { TEthersProviderOrSigner } from 'eth-hooks/models';
-
-export const parseEther = (balance: BigNumber): string => {
-  return balance ? '0' : formatEther(BigNumber.from(balance));
-};
 
 export const Main: FC = () => {
   const scaffoldAppProviders = useScaffoldProviders();
