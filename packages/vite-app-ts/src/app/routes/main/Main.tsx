@@ -3,12 +3,13 @@ import React, { FC, useEffect, useState } from 'react';
 import '~~/styles/main-page.css';
 import { useAppContracts } from './hooks/useAppContracts';
 
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber } from 'ethers';
 import { useContractLoader } from 'eth-hooks';
 
 import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
 
 import { Account } from '~~/app/common/Account';
+import { BuyTokens } from '~~/app/common/BuyTokens';
 import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
 import { useEthersAppContext } from 'eth-hooks/context';
@@ -24,19 +25,21 @@ export const Main: FC = () => {
   const vendorContract = readContracts['Vendor'] as unknown as Vendor;
   const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
 
-  console.log('contracts', vendorContract, tokenContract);
   const [vendorTokenBalance, setVendorTokenBalance] = useState<BigNumber>();
+  const [yourTokenBalance, setYourTokenBalance] = useState<BigNumber>();
 
   // @ts-ignore
-  const getVendorTokenBalance = async (): void => {
-    const balance = await tokenContract?.balanceOf(vendorContract?.address);
-    console.log('🏵 vendorTokenBalance:', balance ? ethers.utils.formatEther(balance) : '...');
-    setVendorTokenBalance(balance);
+  const getTokenBalance = async (address: string, callback: (balance: BigNumber) => void): void => {
+    const balance = await tokenContract?.balanceOf(address);
+    callback(balance);
   };
 
   useEffect(() => {
     if (vendorContract) {
-      getVendorTokenBalance();
+      //   getVendorTokenBalance();
+      getTokenBalance(vendorContract.address, setVendorTokenBalance);
+      getTokenBalance(ethersContext.account!, setYourTokenBalance);
+      console.log(ethersContext);
     }
   }, [vendorContract?.address]);
 
@@ -50,6 +53,10 @@ export const Main: FC = () => {
       <div>
         balance of tokens in Vendor is <Balance balance={vendorTokenBalance} address={undefined} /> ETH
       </div>
+      <div>
+        your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> ETH
+      </div>
+      {ethersContext.active && <BuyTokens providers={scaffoldAppProviders} />}
     </div>
   );
 };
