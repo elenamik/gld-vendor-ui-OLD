@@ -10,11 +10,13 @@ import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
 
 import { Account } from '~~/app/common/Account';
 import { BuyTokens } from '~~/app/common/BuyTokens';
+import { getFaucetAvailable } from '~~/app/common/FaucetHintButton';
 import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
 import { useEthersAppContext } from 'eth-hooks/context';
-import { Balance } from 'eth-components/ant';
+import { Balance, Faucet } from 'eth-components/ant';
 import { TEthersProviderOrSigner } from 'eth-hooks/models';
+import { useDexEthPrice } from 'eth-hooks/dapps';
 
 export const Main: FC = () => {
   const scaffoldAppProviders = useScaffoldProviders();
@@ -27,6 +29,9 @@ export const Main: FC = () => {
   const vendorContract = readContracts['Vendor'] as unknown as Vendor;
   const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
   const vendorContractWrite = writeContracts['Vendor'] as unknown as Vendor;
+  console.log('CONTEXT', ethersContext);
+  console.log('READ', readContracts);
+  console.log('WRITE', writeContracts);
 
   const [vendorTokenBalance, setVendorTokenBalance] = useState<BigNumber>();
   const [yourTokenBalance, setYourTokenBalance] = useState<BigNumber>();
@@ -36,6 +41,8 @@ export const Main: FC = () => {
     const balance = await tokenContract?.balanceOf(address);
     callback(balance);
   };
+  const faucetAvailable = getFaucetAvailable(scaffoldAppProviders, ethersContext);
+  const ethPrice = useDexEthPrice(scaffoldAppProviders.mainnetProvider, scaffoldAppProviders.targetNetwork);
 
   useEffect(() => {
     if (vendorContract) {
@@ -59,7 +66,17 @@ export const Main: FC = () => {
       <div>
         your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> ETH
       </div>
-      {ethersContext.active && <BuyTokens providers={scaffoldAppProviders} vendorWrite={vendorContractWrite} />}
+      {ethersContext.active && <BuyTokens vendorWrite={vendorContractWrite} />}
+      {
+        /*  if the local provider has a signer, let's show the faucet:  */
+        faucetAvailable && scaffoldAppProviders?.mainnetProvider && scaffoldAppProviders?.localProvider && (
+          <Faucet
+            localProvider={scaffoldAppProviders.localProvider}
+            price={ethPrice}
+            mainnetProvider={scaffoldAppProviders.mainnetProvider}
+          />
+        )
+      }
     </div>
   );
 };

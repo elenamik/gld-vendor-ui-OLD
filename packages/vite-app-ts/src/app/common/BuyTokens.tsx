@@ -1,9 +1,7 @@
-import { useGasPrice } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { ethers } from 'ethers';
 import React, { FC, useState } from 'react';
 
-import { IScaffoldAppProviders } from '~~/app/routes/main/hooks/useScaffoldAppProviders';
 import { Vendor } from '~~/generated/contract-types';
 
 const defaultQuantity = 1;
@@ -32,14 +30,11 @@ export const TransactionValue: FC<{ unit: string; value: number }> = ({ unit, va
   );
 };
 export const BuyTokens: FC<{
-  providers: IScaffoldAppProviders;
   vendorWrite: Vendor;
-}> = ({ providers, vendorWrite }) => {
+}> = ({ vendorWrite }) => {
   const ethersContext = useEthersAppContext();
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [buying, setBuying] = useState(false);
-
-  const gasPrice = useGasPrice(ethersContext.chainId, 'fast');
 
   // @ts-ignore
   const handleBuyClick = async (): void => {
