@@ -22,8 +22,11 @@ export const Main: FC = () => {
   const ethersContext = useEthersAppContext();
 
   const readContracts = useContractLoader(appContractConfig, ethersContext.provider as TEthersProviderOrSigner);
+  const writeContracts = useContractLoader(appContractConfig, ethersContext.signer);
+
   const vendorContract = readContracts['Vendor'] as unknown as Vendor;
   const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
+  const vendorContractWrite = writeContracts['Vendor'] as unknown as Vendor;
 
   const [vendorTokenBalance, setVendorTokenBalance] = useState<BigNumber>();
   const [yourTokenBalance, setYourTokenBalance] = useState<BigNumber>();
@@ -56,7 +59,7 @@ export const Main: FC = () => {
       <div>
         your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> ETH
       </div>
-      {ethersContext.active && <BuyTokens providers={scaffoldAppProviders} />}
+      {ethersContext.active && <BuyTokens providers={scaffoldAppProviders} vendorWrite={vendorContractWrite} />}
     </div>
   );
 };
