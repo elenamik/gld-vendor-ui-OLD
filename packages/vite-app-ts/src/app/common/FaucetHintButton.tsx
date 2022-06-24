@@ -15,12 +15,14 @@ interface IFaucetButton {
   gasPrice: number | undefined;
 }
 
-export const getFaucetAvailable = (scaffoldAppProviders: IScaffoldAppProviders, ethersContext: IEthersContext) => {
-  return (
-    (ethersContext?.provider &&
-      ethersContext?.chainId === scaffoldAppProviders.targetNetwork.chainId &&
-      scaffoldAppProviders.targetNetwork.name === 'localhost') ??
-    false
+export const getFaucetAvailable = (
+  scaffoldAppProviders: IScaffoldAppProviders,
+  ethersContext: IEthersContext
+): boolean => {
+  return !!(
+    ethersContext?.provider &&
+    ethersContext?.chainId === scaffoldAppProviders.targetNetwork.chainId &&
+    scaffoldAppProviders.targetNetwork.name === 'localhost'
   );
 };
 
