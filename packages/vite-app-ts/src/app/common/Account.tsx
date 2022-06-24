@@ -20,10 +20,11 @@ export const Account: FC<{
   if (loadingButton && connecting) {
     setConnecting(false);
   }
-  const handleLoginClick = (): void => {
+  // @ts-ignore
+  const handleLoginClick = async (): void => {
     if (providers.createLoginConnector != null) {
       const connector = providers.createLoginConnector();
-      if (connector) ethersContext.activate(connector);
+      if (connector) await ethersContext.activate(connector);
       if (!isMounted()) {
         invariant.log('openModal: no longer mounted');
       } else if (connector) {

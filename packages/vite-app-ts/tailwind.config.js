@@ -4,6 +4,23 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   important: false,
   theme: {
+    fontFamily:{
+      'display': ['Montserrat'],
+      'body': ['Open Sans']
+    },
+    colors: {
+      yellow: {
+        DEFAULT: '#F9E978'
+      },
+      brown: {
+        light: '#A49A81',
+        DEFAULT: '#A49A81',
+        dark: '#37271F'
+      },
+      white: {
+        DEFAULT: '#FEFDF7'
+      },
+    },
     extend: {
       extend: {
         /**
