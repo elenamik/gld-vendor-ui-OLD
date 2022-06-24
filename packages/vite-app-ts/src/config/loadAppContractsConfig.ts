@@ -1,5 +1,4 @@
 import { TContractLoaderConfig, TDeployedContractsJson, TExternalContracts } from 'eth-hooks/models';
-// import type {YourContract} from "../generated/contract-types";
 // this import allows hot module reload to work
 
 const contractListJsonPromise = import('../generated/contracts/hardhat_contracts.json');

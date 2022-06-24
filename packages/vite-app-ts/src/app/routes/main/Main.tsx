@@ -47,7 +47,6 @@ export const Main: FC = () => {
 
   useEffect(() => {
     if (vendorContract) {
-      //   getVendorTokenBalance();
       getTokenBalance(vendorContract.address, setVendorTokenBalance);
       getTokenBalance(ethersContext.account!, setYourTokenBalance);
       console.log(ethersContext);
