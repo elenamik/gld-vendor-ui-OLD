@@ -4,6 +4,10 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   important: false,
   theme: {
+    fontFamily:{
+      'display': ['Montserrat'],
+      'body': ['Open Sans']
+    },
     colors: {
       yellow: {
         DEFAULT: '#F9E978'

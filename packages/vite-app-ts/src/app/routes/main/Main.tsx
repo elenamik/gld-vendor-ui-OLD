@@ -14,7 +14,7 @@ import { getFaucetAvailable } from '~~/app/common/FaucetHintButton';
 import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
 import { useEthersAppContext } from 'eth-hooks/context';
-import { Balance, Faucet } from 'eth-components/ant';
+import { Balance } from 'eth-components/ant';
 import { TEthersProviderOrSigner } from 'eth-hooks/models';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 
@@ -55,6 +55,7 @@ export const Main: FC = () => {
 
   return (
     <div className="App">
+      <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
       <Account providers={scaffoldAppProviders} />
       <div>
         balance of ETH in Vendor is <Balance address={vendorContract?.address} />
@@ -67,16 +68,16 @@ export const Main: FC = () => {
         your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> ETH
       </div>
       {ethersContext.active && <BuyTokens vendorWrite={vendorContractWrite} />}
-      {
-        /*  if the local provider has a signer, let's show the faucet:  */
-        faucetAvailable && scaffoldAppProviders?.mainnetProvider && scaffoldAppProviders?.localProvider && (
-          <Faucet
-            localProvider={scaffoldAppProviders.localProvider}
-            price={ethPrice}
-            mainnetProvider={scaffoldAppProviders.mainnetProvider}
-          />
-        )
-      }
+      {/* {*/}
+      {/*  // if the local provider has a signer, let's show the faucet:*/}
+      {/*  faucetAvailable && scaffoldAppProviders?.mainnetProvider && scaffoldAppProviders?.localProvider && (*/}
+      {/*    <Faucet*/}
+      {/*      localProvider={scaffoldAppProviders.localProvider}*/}
+      {/*      price={ethPrice}*/}
+      {/*      mainnetProvider={scaffoldAppProviders.mainnetProvider}*/}
+      {/*    />*/}
+      {/*  )*/}
+      {/* }*/}
     </div>
   );
 };
