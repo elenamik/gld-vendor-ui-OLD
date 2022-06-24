@@ -7,4 +7,4 @@
 !/contracts/external_contracts.js
 !/contracts/external_contracts.ts
 !/contract-types
-!/deployed_contracts_backup.json
+!/contracts/deployed_contracts_backup.json
