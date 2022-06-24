@@ -1,4 +1,3 @@
-import { useEthersAppContext } from 'eth-hooks/context';
 import { ethers } from 'ethers';
 import React, { FC, useState } from 'react';
 
@@ -38,8 +37,9 @@ export const TransactionValue: FC<{ unit: string; value: number }> = ({ unit, va
 export const BuyTokens: FC<{
   vendorWrite: Vendor;
 }> = ({ vendorWrite }) => {
-  const ethersContext = useEthersAppContext();
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
+
+  // TODO: do something with this
   const [buying, setBuying] = useState(false);
 
   // @ts-ignore
@@ -55,6 +55,7 @@ export const BuyTokens: FC<{
     const re = /^[0-9\b]+$/;
     const val = event.target.value;
     if (val === '' || re.test(val)) {
+      // TODO: deal with string / big number typing on this.
       setInputQuantity(val);
     }
   };
