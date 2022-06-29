@@ -29,7 +29,7 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
       <tr>
         <td>{formatDisplayAddress(event.args[0])}</td>
         <td>{event.event === 'BuyTokens' ? 'BOUGHT' : 'SOLD'}</td>
-        <td>{formatEther(BigNumber.from(event.args[2]))} GLD⚜ </td>
+        <td>{formatEther(BigNumber.from(event.args[2]))} GLD ⚜️ </td>
         <td>{formatEther(BigNumber.from(event.args[1]))} ETH♦ </td>
       </tr>
     );
