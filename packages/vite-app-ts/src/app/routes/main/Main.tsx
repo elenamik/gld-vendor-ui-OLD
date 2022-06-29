@@ -4,13 +4,14 @@ import '~~/styles/main-page.css';
 import { useAppContracts } from './hooks/useAppContracts';
 
 import { BigNumber } from 'ethers';
-import { useContractLoader } from 'eth-hooks';
+import { useContractLoader, useEventListener } from 'eth-hooks';
 
 import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
 
 import { Account } from '~~/app/common/Account';
 import { BuyTokens } from '~~/app/common/BuyTokens';
 import { getFaucetAvailable } from '~~/app/common/FaucetHintButton';
+import { ViewEvents } from '~~/app/common/ViewEvents';
 import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
 import { useEthersAppContext } from 'eth-hooks/context';
@@ -36,6 +37,11 @@ export const Main: FC = () => {
   const [vendorTokenBalance, setVendorTokenBalance] = useState<BigNumber>();
   const [yourTokenBalance, setYourTokenBalance] = useState<BigNumber>();
 
+  const sellTokensEvents = useEventListener(vendorContract, 'SellTokens', 1);
+  console.log('sell events', sellTokensEvents);
+  const buyTokensEvents = useEventListener(vendorContract, 'BuyTokens', 1);
+  console.log('buy events', buyTokensEvents);
+
   // @ts-ignore
   const getTokenBalance = async (address: string, callback: (balance: BigNumber) => void): void => {
     const balance = await tokenContract?.balanceOf(address);
@@ -55,7 +61,7 @@ export const Main: FC = () => {
 
   return (
     <div className="App">
-      <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
+      <div className="flex flex-col text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
       <Account providers={scaffoldAppProviders} />
       <div>
         balance of ETH in Vendor is <Balance address={vendorContract?.address} />
@@ -68,6 +74,9 @@ export const Main: FC = () => {
         your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> GLD
       </div>
       {ethersContext.active && <BuyTokens vendorWrite={vendorContractWrite} />}
+      <div className="w-full">
+        <ViewEvents sellEvents={sellTokensEvents[0]} buyEvents={buyTokensEvents[0]} />
+      </div>
       {
         // if the local provider has a signer, let's show the faucet:
         faucetAvailable && scaffoldAppProviders?.mainnetProvider && scaffoldAppProviders?.localProvider && (

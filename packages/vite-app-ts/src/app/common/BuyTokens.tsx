@@ -66,8 +66,9 @@ export const BuyTokens: FC<{
         id="buy-sell-tab-content"
         className="flex flex-col items-center justify-center w-1/2 pt-6 bg-white border-4 rounded-b-lg">
         <TransactionInput unit="GLD" onChange={handleQuantityChange} value={inputQuantity} />
-        <div className="p-2 text-lg">⚜ FOR ⚜</div>
+        <div className="p-2 text-lg">⚜️ FOR ⚜️</div>
         <TransactionValue unit="ETH" value={inputQuantity / 100} />
+
         <button className="p-1 m-3 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleBuyClick}>
           EXECUTE
         </button>
