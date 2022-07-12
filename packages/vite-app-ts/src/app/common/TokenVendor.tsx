@@ -41,20 +41,22 @@ export const TokenVendor: FC<{
           <button
             onClick={(): void => {
               setAction('BUYING');
+              setInputQuantity(1);
             }}
             className={
               'flex-grow px-10 py-4 text-2xl font-bold text-center border-2 border-b-0 font-display rounded-t-2xl ' +
-              (action === 'BUYING' ? 'bg-white' : 'bg-gray')
+              (action === 'BUYING' ? 'bg-white' : 'bg-gray opacity-50')
             }>
             BUY
           </button>
           <button
             onClick={(): void => {
               setAction('SELLING');
+              setInputQuantity(1);
             }}
             className={
               'flex-grow px-10 py-4 text-2xl font-bold text-center border-2 border-b-0 font-display rounded-t-2xl ' +
-              (action === 'SELLING' ? 'bg-white' : 'bg-gray')
+              (action === 'SELLING' ? 'bg-white' : 'bg-gray opacity-50')
             }>
             SELL
           </button>
