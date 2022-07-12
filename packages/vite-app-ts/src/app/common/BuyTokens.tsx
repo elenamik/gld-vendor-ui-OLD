@@ -61,17 +61,28 @@ export const BuyTokens: FC<{
   };
 
   return (
-    <div id="buy-sell-tab-container" className="flex justify-center">
-      <div
-        id="buy-sell-tab-content"
-        className="flex flex-col items-center justify-center w-1/2 pt-6 bg-white border-4 rounded-b-lg">
-        <TransactionInput unit="GLD" onChange={handleQuantityChange} value={inputQuantity} />
-        <div className="p-2 text-lg">⚜️ FOR ⚜️</div>
-        <TransactionValue unit="ETH" value={inputQuantity / 100} />
+    <div className="w-1/2 m-auto">
+      <div id="container" className="flex flex-col items-center">
+        <div id="tabs" className="flex flex-row justify-between w-full">
+          <div className="flex-grow px-10 py-4 text-2xl font-bold text-center border-2 border-b-0 font-display rounded-t-2xl">
+            BUY
+          </div>
+          <div className="flex-grow px-10 py-4 text-2xl font-bold text-center border-2 border-b-0 font-display rounded-t-2xl">
+            SELL
+          </div>
+        </div>
 
-        <button className="p-1 m-3 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleBuyClick}>
-          EXECUTE
-        </button>
+        <div
+          id="buy-sell-tab-content"
+          className="flex flex-col items-center w-full py-4 bg-white border-2 rounded-b-xl">
+          <TransactionInput unit="GLD" onChange={handleQuantityChange} value={inputQuantity} />
+          <div className="p-2 text-lg">⚜️ FOR ⚜️</div>
+          <TransactionValue unit="ETH" value={inputQuantity / 100} />
+
+          <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleBuyClick}>
+            EXECUTE
+          </button>
+        </div>
       </div>
     </div>
   );
