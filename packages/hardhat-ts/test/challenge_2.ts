@@ -15,7 +15,7 @@ import { Contract } from 'ethers';
 
 use(solidity);
 
-describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
+describe("🚩 Challenge 2: 🏵 Token TokenVendor 🤖", function () {
 
   this.timeout(125000);
 
@@ -49,11 +49,11 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
 
   if(process.env.CONTRACT_ADDRESS){
     it("Should connect to external contract", async function () {
-      vendor = await ethers.getContractAt("Vendor",process.env.CONTRACT_ADDRESS!);
+      vendor = await ethers.getContractAt("TokenVendor",process.env.CONTRACT_ADDRESS!);
       console.log(`\t`,"🛰 Connected to:",vendor.address)
 
-      console.log(`\t`,"📡 Loading the yourToken address from the Vendor...")
-      console.log(`\t`,"⚠️ Make sure *yourToken* is public in the Vendor.sol!")
+      console.log(`\t`,"📡 Loading the yourToken address from the TokenVendor...")
+      console.log(`\t`,"⚠️ Make sure *yourToken* is public in the TokenVendor.sol!")
       let tokenAddress = await vendor.yourToken();
       console.log('\t',"🏷 Token Address:",tokenAddress)
 
@@ -61,8 +61,8 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       console.log(`\t`,"🛰 Connected to YourToken at:",yourToken.address)
     });
   }else{
-    it("Should deploy Vendor", async function () {
-      const Vendor = await ethers.getContractFactory("Vendor");
+    it("Should deploy TokenVendor", async function () {
+      const Vendor = await ethers.getContractFactory("TokenVendor");
       vendor = await Vendor.deploy(yourToken.address);
 
       console.log("Transferring 1000 tokens to the vendor...")
