@@ -4,16 +4,16 @@ import React, { FC, useState } from 'react';
 import { TransactionInput } from './TransactionInput';
 import { TransactionValue } from './TransactionValue';
 
-import { Vendor } from '~~/generated/contract-types';
+import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
 const defaultQuantity = 1;
 
 export const TokenVendor: FC<{
   vendorWrite: Vendor;
-}> = ({ vendorWrite }) => {
+  tokenWrite: YourTokenContract;
+}> = ({ vendorWrite, tokenWrite }) => {
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
-  console.log(action);
   const [buying, setBuying] = useState(false);
 
   // @ts-ignore
@@ -64,31 +64,52 @@ export const TokenVendor: FC<{
         <div
           id="buy-sell-tab-content"
           className="flex flex-col items-center w-full py-4 bg-white border-2 rounded-b-xl">
-          <BuyTokens
-            handleQuantityChange={handleQuantityChange}
-            inputQuantity={inputQuantity}
-            handleBuyClick={handleBuyClick}
-          />
+          <TransactionInput unit="GLD" onChange={handleQuantityChange} value={inputQuantity} />
+          <div className="p-2 text-lg">⚜️ FOR ⚜️</div>
+          <TransactionValue unit="ETH" value={inputQuantity / 100} />
+          {action === 'BUYING' ? (
+            <button
+              className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72"
+              onClick={handleBuyClick}>
+              EXECUTE
+            </button>
+          ) : (
+            <SellButton vendorWrite={vendorWrite} tokenWrite={tokenWrite} inputQuantity={inputQuantity} />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const BuyTokens: FC<{
-  handleQuantityChange: any;
-  inputQuantity: any;
-  handleBuyClick: any;
-}> = ({ handleQuantityChange, inputQuantity, handleBuyClick }) => {
-  return (
-    <>
-      <TransactionInput unit="GLD" onChange={handleQuantityChange} value={inputQuantity} />
-      <div className="p-2 text-lg">⚜️ FOR ⚜️</div>
-      <TransactionValue unit="ETH" value={inputQuantity / 100} />
+export const SellButton: FC<{
+  vendorWrite: Vendor;
+  tokenWrite: YourTokenContract;
+  inputQuantity: string;
+}> = ({ vendorWrite, tokenWrite, inputQuantity }) => {
+  const [approved, setApproved] = useState(false);
 
-      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleBuyClick}>
+  const handleApprove = async () => {
+    await tokenWrite.approve(vendorWrite.address, ethers.utils.parseEther(inputQuantity));
+    setApproved(true);
+  };
+  const handleSell = async () => {
+    console.log(inputQuantity, ethers.utils.parseEther(inputQuantity));
+    await vendorWrite.sellTokens(inputQuantity);
+    setApproved(false);
+  };
+
+  if (!approved) {
+    return (
+      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleApprove}>
+        APPROVE
+      </button>
+    );
+  } else {
+    return (
+      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleSell}>
         EXECUTE
       </button>
-    </>
-  );
+    );
+  }
 };

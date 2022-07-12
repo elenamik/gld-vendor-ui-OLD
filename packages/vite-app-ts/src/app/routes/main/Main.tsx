@@ -30,6 +30,8 @@ export const Main: FC = () => {
   const vendorContract = readContracts['Vendor'] as unknown as Vendor;
   const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
   const vendorContractWrite = writeContracts['Vendor'] as unknown as Vendor;
+  const tokenContractWrite = writeContracts['YourToken'] as unknown as YourTokenContract;
+
   console.log('PROVIDERS', scaffoldAppProviders);
   console.log('CONTEXT', ethersContext);
   console.log('CONTRACTS', readContracts);
@@ -73,7 +75,7 @@ export const Main: FC = () => {
       <div>
         your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> GLD
       </div>
-      {ethersContext.active && <TokenVendor vendorWrite={vendorContractWrite} />}
+      {ethersContext.active && <TokenVendor vendorWrite={vendorContractWrite} tokenWrite={tokenContractWrite} />}
       <div className="w-full">
         <ViewEvents sellEvents={sellTokensEvents[0]} buyEvents={buyTokensEvents[0]} />
       </div>
