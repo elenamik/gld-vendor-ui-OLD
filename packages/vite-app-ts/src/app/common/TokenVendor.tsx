@@ -95,7 +95,7 @@ export const SellButton: FC<{
   };
   const handleSell = async () => {
     console.log(inputQuantity, ethers.utils.parseEther(inputQuantity));
-    await vendorWrite.sellTokens(inputQuantity);
+    await vendorWrite.sellTokens(ethers.utils.parseEther(inputQuantity));
     setApproved(false);
   };
 

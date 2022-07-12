@@ -1,5 +1,5 @@
 
-## 🏵 GLD TokenVendor
+## 🏵 GLD Vendor
 Building a simple UI against a smart contract which can buy and sells fictional GLD Tokens. 
 
 I am leveraging eth-hooks, and using [this design](https://www.figma.com/file/KXrIvKLSGnH3AfIzFIJvu6/GLD-Token-Vendor?node-id=0%3A1) to style the page.
