@@ -9,8 +9,8 @@ import { useContractLoader, useEventListener } from 'eth-hooks';
 import { useScaffoldProviders } from './hooks/useScaffoldAppProviders';
 
 import { Account } from '~~/app/common/Account';
-import { BuyTokens } from '~~/app/common/BuyTokens';
 import { getFaucetAvailable } from '~~/app/common/FaucetHintButton';
+import { TokenVendor } from '~~/app/common/TokenVendor';
 import { ViewEvents } from '~~/app/common/ViewEvents';
 import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
 
@@ -30,6 +30,8 @@ export const Main: FC = () => {
   const vendorContract = readContracts['Vendor'] as unknown as Vendor;
   const tokenContract = readContracts['YourToken'] as unknown as YourTokenContract;
   const vendorContractWrite = writeContracts['Vendor'] as unknown as Vendor;
+  const tokenContractWrite = writeContracts['YourToken'] as unknown as YourTokenContract;
+
   console.log('PROVIDERS', scaffoldAppProviders);
   console.log('CONTEXT', ethersContext);
   console.log('CONTRACTS', readContracts);
@@ -73,7 +75,7 @@ export const Main: FC = () => {
       <div>
         your balance of tokens is <Balance balance={yourTokenBalance} address={undefined} /> GLD
       </div>
-      {ethersContext.active && <BuyTokens vendorWrite={vendorContractWrite} />}
+      {ethersContext.active && <TokenVendor vendorWrite={vendorContractWrite} tokenWrite={tokenContractWrite} />}
       <div className="w-full">
         <ViewEvents sellEvents={sellTokensEvents[0]} buyEvents={buyTokensEvents[0]} />
       </div>
